@@ -5,31 +5,28 @@ public class InputManager : MonoBehaviour {
 	//Declaring local variables
 	
 	//--Private Members
-	private Vector3 mousePosition;
-	private bool panningActive;
-	private CameraManager cameraManager;
 	private delegate void HandleAllInputs();
+	private CameraManager cameraManager;
 	private HandleAllInputs handleAllInputs;
+	private Unit unit;
+	private float back = -1.0f;
+	private float forward = 1.0f;
+	private Vector3 lastMousePosition;
 
 	// Use this for initialization
 	void Start () 
 	{	
-		panningActive = false;
 		cameraManager = Camera.main.GetComponent<CameraManager> ();
+		unit = gameObject.GetComponent<GameManager>().GetFocusedUnit().GetComponent<Unit>();
 		handleAllInputs += HandleUnitCameraFocus;
 		handleAllInputs += HandleCameraPanning;
+		handleAllInputs += HandleUnitMovement;
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
 		handleAllInputs();
-	}
-	
-	// Called after Update
-	void LateUpdate()
-	{
-		
 	}
 
 	void HandleUnitCameraFocus()
@@ -40,28 +37,29 @@ public class InputManager : MonoBehaviour {
 		}
 	}
 
+	void HandleUnitMovement()
+	{
+		if(Input.GetKey("a")/*Down(KeyCode.A)*/)
+		{	
+			unit.MoveFocusedUnit(back);
+		}
+		
+		if(Input.GetKey("d")/*Down(KeyCode.D)*/)
+		{
+			unit.MoveFocusedUnit(forward);
+		}
+	}
+
 	void HandleCameraPanning()
 	{
-		//Disables the mouse panning
-		if (!Input.GetMouseButton(0)) 
-		{
-			panningActive = false;
-		}
-		//User is panning the camera
-		else if(Input.GetMouseButtonDown(0))
+		if (Input.GetMouseButtonDown(0))
 		{
 			//Get the origin of the mouse's position
-			mousePosition = Input.mousePosition;
-			panningActive = true;
+			lastMousePosition = Input.mousePosition;
 		}
-		
-		//If the user wants to pan, camera will call CameraPanning, taking the position of the mouse
-		//as an argument
-		if(panningActive == true)
+		if (Input.GetMouseButton(0))
 		{
-			cameraManager.CameraPanning(mousePosition);
+			cameraManager.CameraPanning(lastMousePosition);
 		}
-		
-		
 	}
 }
