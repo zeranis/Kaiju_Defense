@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InputManager : MonoBehaviour {
+public class InputManager : MonoBehaviour 
+{
 	//Declaring local variables
 	
 	//--Private Members
@@ -57,6 +58,7 @@ public class InputManager : MonoBehaviour {
 			//Get the origin of the mouse's position
 			lastMousePosition = Input.mousePosition;
 		}
+
 		if (Input.GetMouseButton(0))
 		{
 			cameraManager.CameraPanning(lastMousePosition);
