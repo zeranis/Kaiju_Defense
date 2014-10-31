@@ -24,7 +24,7 @@ public class CameraManager : MonoBehaviour
 	{
 		//Initializes the position of the camera to the coordinate: 
 		//(x,y,z) = (0, 20, camera's z-coordinates)
-		gameObject.transform.position = new Vector3(0, 3.5f, gameObject.transform.position.z);
+		gameObject.transform.position = new Vector3(0, 0, -5);
 	}
 			
 	// Use this for initialization
@@ -64,6 +64,7 @@ public class CameraManager : MonoBehaviour
 		
 		//This will be the new position of the mouse, thus will also be the camera's new position
 		Vector3 mouseDestination = new Vector3(mousePosNormalized.x * panningSpeed, mousePosNormalized.y * panningSpeed, 0);
+		print (mouseDestination);
 		//This will Translate, or move, the camera's position to the mouse's position
 		Camera.main.transform.Translate(mouseDestination, Space.Self);
 	}
