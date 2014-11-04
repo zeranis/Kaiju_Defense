@@ -8,17 +8,23 @@ public class InputManager : MonoBehaviour
 	//--Private Members
 	private delegate void HandleAllInputs();
 	private CameraManager cameraManager;
+	private GameManager gameManager;
 	private HandleAllInputs handleAllInputs;
 	private Unit unit;
 	private float back = -1.0f;
 	private float forward = 1.0f;
+	private int unitFocused;
 	private Vector3 lastMousePosition;
 
 	// Use this for initialization
 	void Start () 
 	{	
-		cameraManager = Camera.main.GetComponent<CameraManager> ();
-		unit = gameObject.GetComponent<GameManager>().GetFocusedUnit().GetComponent<Unit>();
+		cameraManager = Camera.main.GetComponent<CameraManager>();
+		gameManager = gameObject.GetComponent<GameManager>();
+		unit = gameManager.GetFocusedUnit().GetComponent<Unit>();
+		//unit = gameObject.GetComponent<GameManager>().GetFocusedUnit().GetComponent<Unit>();
+		//nitList = gameObject.GetComponent<Unit>().GetComponent<GameManager>().GetUnitFocused();
+	
 		handleAllInputs += HandleUnitCameraFocus;
 		handleAllInputs += HandleCameraPanning;
 		handleAllInputs += HandleUnitMovement;
@@ -32,9 +38,12 @@ public class InputManager : MonoBehaviour
 
 	void HandleUnitCameraFocus()
 	{
-		if (Input.GetKeyDown(KeyCode.Tab))
+		if(Input.GetKeyDown(KeyCode.Tab))
 		{
-
+			gameManager.CycleUnits();
+			gameManager.SetFocusedUnit();
+			unit = gameManager.GetFocusedUnit().GetComponent<Unit>();
+			cameraManager.UnitFocus(unit);
 		}
 	}
 

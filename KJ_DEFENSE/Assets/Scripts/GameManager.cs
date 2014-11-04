@@ -1,22 +1,52 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour 
 {
 	//Declaring local variables
 
-	//--Private Members
 	public GameObject focusedUnit;
-	// Use this for initialization
-	void Start () 
-	{	
+	private GameObject[] listOfUnits;
+	private int unitFocused;
 
+	void Start()
+	{
+		listOfUnits = GetUnitList();
+		unitFocused = 0;
 	}
 
-	// Update is called once per frame
-	void Update () 
+	void Update()
 	{
+		listOfUnits = GetUnitList();
+	}
 
+	private GameObject[] GetUnitList()
+	{
+		//Declaring local variables
+		List<GameObject> units = new List<GameObject>();
+
+		foreach (Unit unit in GameObject.FindObjectsOfType(typeof(Unit))) 
+		{
+			units.Add(unit.gameObject);
+		}
+
+		Debug.Log("unitFocused value is: " + unitFocused);
+		Debug.Log (units.Count);
+
+		return units.ToArray();
+	}
+
+	public void CycleUnits()
+	{
+		if(unitFocused >= listOfUnits.Length - 1)
+		{
+			unitFocused = 0;
+		}
+		else
+		{
+			unitFocused++;
+		}
 	}
 
 	public GameObject GetFocusedUnit()
@@ -24,9 +54,10 @@ public class GameManager : MonoBehaviour
 		return focusedUnit;
 	}
 
-	public void SetFocusedUnit(GameObject newFocusedUnit)
+	public void SetFocusedUnit()
 	{
-		focusedUnit = newFocusedUnit;
+		focusedUnit = listOfUnits[unitFocused];
+		Debug.Log("Test");
 	}
 
 }
