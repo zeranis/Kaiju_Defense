@@ -4,7 +4,7 @@ using System.Collections;
 public class InputManager : MonoBehaviour 
 {
 	//Declaring local variables
-	
+
 	//--Private Members
 	private delegate void HandleAllInputs();
 	private CameraManager cameraManager;
@@ -15,16 +15,17 @@ public class InputManager : MonoBehaviour
 	private float forward = 1.0f;
 	private int unitFocused;
 	private Vector3 lastMousePosition;
+	private RaycastHit2D cameraRay;
+	private bool isNotHit;
 
 	// Use this for initialization
 	void Start () 
 	{	
+		isNotHit = true;
 		cameraManager = Camera.main.GetComponent<CameraManager>();
 		gameManager = gameObject.GetComponent<GameManager>();
 		unit = gameManager.GetFocusedUnit().GetComponent<Unit>();
-		//unit = gameObject.GetComponent<GameManager>().GetFocusedUnit().GetComponent<Unit>();
-		//nitList = gameObject.GetComponent<Unit>().GetComponent<GameManager>().GetUnitFocused();
-	
+			
 		handleAllInputs += HandleUnitCameraFocus;
 		handleAllInputs += HandleCameraPanning;
 		handleAllInputs += HandleUnitMovement;
@@ -40,35 +41,62 @@ public class InputManager : MonoBehaviour
 	{
 		if(Input.GetKeyDown(KeyCode.Tab))
 		{
+			isNotHit = true;
 			gameManager.CycleUnits();
 			gameManager.SetFocusedUnit();
 			unit = gameManager.GetFocusedUnit().GetComponent<Unit>();
+			cameraManager.UnitFocus(unit);
+		}
+
+		if(isNotHit == false)
+		{
+			unit = cameraRay.collider.gameObject.GetComponent<Unit>();
 			cameraManager.UnitFocus(unit);
 		}
 	}
 
 	void HandleUnitMovement()
 	{
-		if(Input.GetKey("a")/*Down(KeyCode.A)*/)
+		if(Input.GetKey("a"))
 		{	
+			unit.setAnimation(true);
 			unit.MoveFocusedUnit(back);
 		}
 		
-		if(Input.GetKey("d")/*Down(KeyCode.D)*/)
+		else if(Input.GetKey("d")/*Down(KeyCode.D)*/)
 		{
+			unit.setAnimation(true);
 			unit.MoveFocusedUnit(forward);
 		}
+		else
+		{
+			unit.setAnimation(false);
+		}
+
 	}
 
 	void HandleCameraPanning()
 	{
+		//Declaring local variables
+
 		if (Input.GetMouseButtonDown(0))
 		{
-			//Get the origin of the mouse's position
-			lastMousePosition = Input.mousePosition;
+			cameraRay = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+
+			if(cameraRay.collider == null)
+			{
+				//Get the origin of the mouse's position
+				lastMousePosition = Input.mousePosition;
+				isNotHit = true;
+			}
+			else
+			{
+				isNotHit = false;
+				Debug.Log("Mouse clicked an object: " + isNotHit);
+			}
 		}
 
-		if (Input.GetMouseButton(0))
+		if (Input.GetMouseButton(0) && isNotHit == true)
 		{
 			cameraManager.CameraPanning(lastMousePosition);
 		}

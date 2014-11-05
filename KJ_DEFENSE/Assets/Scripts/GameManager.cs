@@ -7,39 +7,51 @@ public class GameManager : MonoBehaviour
 	//Declaring local variables
 
 	public GameObject focusedUnit;
-	private GameObject[] listOfUnits;
+	private List<GameObject> listOfUnits = new List<GameObject>();
 	private int unitFocused;
 
+	void Awake()
+	{
+		foreach (Unit unit in GameObject.FindObjectsOfType(typeof(Unit))) 
+		{
+			listOfUnits.Add(unit.gameObject);
+		}
+	}
 	void Start()
 	{
-		listOfUnits = GetUnitList();
+		//listOfUnits = GetUnitList();
 		unitFocused = 0;
 	}
 
 	void Update()
 	{
-		listOfUnits = GetUnitList();
+		//listOfUnits = GetUnitList();
+	}
+
+	public void AppendUnitToList(GameObject newUnit)
+	{
+		listOfUnits.Add(newUnit);
 	}
 
 	private GameObject[] GetUnitList()
 	{
 		//Declaring local variables
-		List<GameObject> units = new List<GameObject>();
+		//List<GameObject> units = new List<GameObject>();
 
-		foreach (Unit unit in GameObject.FindObjectsOfType(typeof(Unit))) 
-		{
-			units.Add(unit.gameObject);
-		}
+		//foreach (Unit unit in GameObject.FindObjectsOfType(typeof(Unit))) 
+		//{
+			//units.Add(unit.gameObject);
+		//}
 
-		Debug.Log("unitFocused value is: " + unitFocused);
-		Debug.Log (units.Count);
+		//Debug.Log("unitFocused value is: " + unitFocused);
+		//Debug.Log (units.Count);
 
-		return units.ToArray();
+		return listOfUnits.ToArray();
 	}
 
 	public void CycleUnits()
 	{
-		if(unitFocused >= listOfUnits.Length - 1)
+		if(unitFocused >= GetUnitList().Length - 1)
 		{
 			unitFocused = 0;
 		}
@@ -57,7 +69,6 @@ public class GameManager : MonoBehaviour
 	public void SetFocusedUnit()
 	{
 		focusedUnit = listOfUnits[unitFocused];
-		Debug.Log("Test");
 	}
 
 }

@@ -12,6 +12,7 @@ public class Unit : MonoBehaviour
 {
 	//Declaring local variables:
 	public Unit_Type type;
+	Animator anim;
 	
 	//Public members:
 	//public Texture playerHealthTexture; //Player Life
@@ -22,23 +23,29 @@ public class Unit : MonoBehaviour
 	//public int tankHealth = 10; //Starting armor
 	public float objSpeed;
 	private Vector3 position;
-	private bool isFocused = false;
-	//private GameManager GM = GameObject.FindWithTag("GM").GetComponent<GameManager>();
-
+	
 	void Start()
 	{
-		isFocused = true;
+		//isFocused = true;
+		anim = GetComponent<Animator>();
 		position = this.transform.position;
-	}
-
-	void Update()
-	{					
-
 	}
 
 	public void MoveFocusedUnit(float moveDirection)
 	{
 		position.x += moveDirection * objSpeed * Time.deltaTime;
 		this.transform.position = position;
+	}
+
+	public void setAnimation(bool move)
+	{
+		if(move == true)
+		{
+			anim.SetFloat("Speed", Mathf.Abs(objSpeed));
+		}
+		else
+		{
+			anim.SetFloat("Speed", Mathf.Abs(0.0f));
+		}
 	}
 }

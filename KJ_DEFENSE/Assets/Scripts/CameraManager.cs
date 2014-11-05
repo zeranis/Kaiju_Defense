@@ -10,15 +10,8 @@ public class CameraManager : MonoBehaviour
 	public GameObject centerBg;
 	//--Private members
 	private Vector3 newPosition;
-	//private float centerX;
-	//private float centerY;
-	//private float offsetX;
-	//private float offsetY;
-	//private float aspectRatio;
 	private bool isUnitFocused;
 	private float panningSpeed = 2.0f;
-	private bool stopPanning = false;
-	private bool colliding = false;
 	private Vector3 temp;
 	private Unit focusedUnit;
 
@@ -31,17 +24,11 @@ public class CameraManager : MonoBehaviour
 	// Use this for super initialization
 	void Awake()
 	{
-		//Initializes the position of the camera to the coordinate: 
-		//(x,y,z) = (0, 20, camera's z-coordinates)
 		//HACK
 		if (centerBg == null || centerBg == null)
 		{
 			centerBg = GameObject.Find ("BG2");
 		}
-
-		//gameObject.transform.position = new Vector3(0, 3.5f, gameObject.transform.position.z);
-		//cameraBounds = GameObject.Find("CameraBounds").GetComponent<BoxCollider>();
-		//cameraColl = GameObject.Find("CameraBounds").GetComponent<Collision>();
 	}
 			
 	// Use this for initialization
@@ -50,58 +37,16 @@ public class CameraManager : MonoBehaviour
 		//Setting the camera into ortographic mode
 		Camera.main.orthographic = true;
 
-		//Changing the camera's half-vertical size
-		//Camera.main.orthographicSize = 4.0f; 
-
-		//Initializing unitFocused to zero
-		//unitFocused = 0;
-
 		//Initializing isUnitFocused to false
 		isUnitFocused = false;
-
-		//float vertExtent = Camera.main.camera.orthographicSize;
-		//float horzExtend = vertExtent * Screen.width/Screen.height;
-		//spriteBounds = GameObject.Find("BG1").GetComponentInChildren<SpriteRenderer>();
-		//leftBound = (float)(horzExtend - spriteBounds.sprite.bounds.size.x/2.0f);
-		//rightBound = (float)(spriteBounds.sprite.bounds.size.x/2.0f - horzExtend);
-		//bottomBound = (float)(vertExtent - spriteBounds.sprite.bounds.size.y/2.0f);
-		//topBound = (float)(spriteBounds.sprite.bounds.size.y/2.0f - vertExtent);
-
-		//Debug.Log(spriteBounds.bounds.size.x);
-		//Debug.Log(spriteBounds.bounds.size.y);
-
-		//Debug.Log(leftBound);
-		//Debug.Log (rightBound);
-		//Debug.Log (topBound);
-		//Debug.Log(bottomBound);
 		float widthBG = 38.4f;
-		Debug.Log ("width: " + widthBG);
 		float heightBG = 10.24f;
-		Debug.Log ("height: " + heightBG);
 		float vertExtent = camera.orthographicSize; 
-		Debug.Log ("vertEx: " + vertExtent);
 		float horzExtent = camera.orthographicSize * Screen.width / Screen.height;
-		Debug.Log ("horzEx: " + horzExtent);
-		float minX = horzExtent - (widthBG / 2.0f);
-		float maxX = (widthBG / 2.0f) - horzExtent;
-		Debug.Log ("MinX: " + minX);
-		Debug.Log("MaxX: " + maxX);
-		float minY = vertExtent - (heightBG / 2.0f);
-		float maxY = (heightBG / 2.0f) - vertExtent;
-		Debug.Log ("MinY" + minY);
-		Debug.Log ("MaxY" + maxY);
-		leftBound = minX;
-		Debug.Log ("leftBound: " + leftBound);
-		rightBound = maxX;
-		Debug.Log ("rightBound: " + rightBound);
-		bottomBound = minY;
-		Debug.Log ("bottomBound: " + bottomBound);
-		topBound = maxY;
-		Debug.Log ("topBound: " + topBound);
-		//leftBound = leftmostBg.transform.position.x + (2 * (camera.orthographicSize - 4.5f));
-		//rightBound = rightmostBg.transform.position.x + (2 * (4.5f - camera.orthographicSize));
-		//topBound = leftmostBg.transform.position.y + (heightBG - camera.orthographicSize);
-		//bottomBound = leftmostBg.transform.position.y - (heightBG - camera.orthographicSize);
+		leftBound = horzExtent - (widthBG / 2.0f);
+		rightBound = (widthBG / 2.0f) - horzExtent;
+		bottomBound = vertExtent - (heightBG / 2.0f);
+		topBound = (heightBG / 2.0f) - vertExtent;
 	}
 	
 	// Update is called once per frame
@@ -111,9 +56,7 @@ public class CameraManager : MonoBehaviour
 		if(isUnitFocused == true)
 		{
 			//Lerp the camera to new position. 
-			Debug.Log("Lerping");
 			CameraFollowUnit();
-			//Camera.main.transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * camSpeed);
 		}
 	}
 
@@ -131,13 +74,11 @@ public class CameraManager : MonoBehaviour
 
 		isUnitFocused = false;
 
-		Debug.Log(mouseDestination);
 		temp = gameObject.transform.position + mouseDestination;
 		temp.x = Mathf.Clamp(temp.x, leftBound, rightBound);
 		temp.y = Mathf.Clamp(temp.y, bottomBound, topBound);
 
 		//This will Translate, or move, the camera's position to the mouse's position
-		//Camera.main.transform.Translate(mouseDestination, Space.Self);
 		gameObject.transform.position = temp;
 
 
@@ -149,25 +90,6 @@ public class CameraManager : MonoBehaviour
 		newPosition.x = Mathf.Clamp (newPosition.x, leftBound, rightBound);
 		newPosition.y = Mathf.Clamp (newPosition.y, bottomBound, rightBound);
 		Camera.main.transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * camSpeed);
-		//gameObject.transform.position = newPosition;
-	}
-//	void OnTriggerExit(Collider cameraBounds)
-//	{
-//		Debug.Log ("OnTriggerExit");
-//		//panningSpeed *= -1.0f;
-//		stopPanning = true;
-//	
-//	}
-//
-//	void OnTriggerEnter(Collider cameraBounds)
-//	{
-//		Debug.Log ("OnTriggerEnter");
-//		stopPanning = false;
-//	}
-
-	public void BoundCamera(float width, float height)
-	{
-		
 	}
 
 	//Method -- UnitFocus
