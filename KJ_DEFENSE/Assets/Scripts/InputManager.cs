@@ -42,6 +42,7 @@ public class InputManager : MonoBehaviour
 		if(Input.GetKeyDown(KeyCode.Tab))
 		{
 			isNotHit = true;
+			unit.setAnimation(false);
 			gameManager.CycleUnits();
 			gameManager.SetFocusedUnit();
 			unit = gameManager.GetFocusedUnit().GetComponent<Unit>();
@@ -50,8 +51,12 @@ public class InputManager : MonoBehaviour
 
 		if(isNotHit == false)
 		{
-			unit = cameraRay.collider.gameObject.GetComponent<Unit>();
-			cameraManager.UnitFocus(unit);
+			if (cameraRay.collider.gameObject.CompareTag("Tank"))
+			{
+				unit.setAnimation(false);
+				unit = cameraRay.collider.gameObject.GetComponent<Unit>();
+			}
+				cameraManager.UnitFocus(unit);
 		}
 	}
 
