@@ -7,25 +7,18 @@ public class GameManager : MonoBehaviour
 	//Declaring local variables
 
 	public GameObject focusedUnit;
-	private List<GameObject> listOfUnits = new List<GameObject>();
+	public Transform SpawnLocation;
+	public List<GameObject> listOfUnits = new List<GameObject>();
 	private int unitFocused;
 
 	void Awake()
 	{
-		foreach (Unit unit in GameObject.FindObjectsOfType(typeof(Unit))) 
-		{
-			listOfUnits.Add(unit.gameObject);
-		}
+		listOfUnits.Add(focusedUnit);
 	}
 	void Start()
 	{
 		//listOfUnits = GetUnitList();
 		unitFocused = 0;
-	}
-
-	void Update()
-	{
-		//listOfUnits = GetUnitList();
 	}
 
 	public void AppendUnitToList(GameObject newUnit)
@@ -35,17 +28,6 @@ public class GameManager : MonoBehaviour
 
 	private GameObject[] GetUnitList()
 	{
-		//Declaring local variables
-		//List<GameObject> units = new List<GameObject>();
-
-		//foreach (Unit unit in GameObject.FindObjectsOfType(typeof(Unit))) 
-		//{
-			//units.Add(unit.gameObject);
-		//}
-
-		//Debug.Log("unitFocused value is: " + unitFocused);
-		//Debug.Log (units.Count);
-
 		return listOfUnits.ToArray();
 	}
 
@@ -60,7 +42,13 @@ public class GameManager : MonoBehaviour
 			unitFocused++;
 		}
 	}
-
+	public void getAllUnit()
+	{
+		foreach (Unit unit in GameObject.FindObjectsOfType(typeof(Unit))) 
+		{
+			listOfUnits.Add(unit.gameObject);
+		}
+	}
 	public GameObject GetFocusedUnit()
 	{
 		return focusedUnit;
@@ -69,6 +57,15 @@ public class GameManager : MonoBehaviour
 	public void SetFocusedUnit()
 	{
 		focusedUnit = listOfUnits[unitFocused];
+	
 	}
-
+	//Reference
+	//Declaring local variables
+	//List<GameObject> units = new List<GameObject>();	
+	//foreach (Unit unit in GameObject.FindObjectsOfType(typeof(Unit))) 
+	//{
+	//units.Add(unit.gameObject);
+	//}
+	//Debug.Log("unitFocused value is: " + unitFocused);
+	//Debug.Log (units.Count);
 }
