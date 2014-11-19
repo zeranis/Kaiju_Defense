@@ -12,6 +12,7 @@ public class CameraManager : MonoBehaviour
 	private Vector3 newPosition;
 	private bool isUnitFocused;
 	private float panningSpeed = 2.0f;
+//	private float zoomingSpeed = 2.0f;
 	private Vector3 temp;
 	private Unit focusedUnit;
 
@@ -83,10 +84,27 @@ public class CameraManager : MonoBehaviour
 
 
 	}
+	//Method -- CameraZooming
+	//Parameters -- value
+	//Purpose -- add new value to orthogragive size .
+	public void CameraZooming(float value)
+	{
+		//Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - mousePosOrigin);
+		//Vector3 mov = pos.y * zoomingSpeed * transform.forward;
+		//transform.Translate(mov, Space.World);
+		if (camera.orthographicSize < 5 && value > 0)
+		{
+			camera.orthographicSize += value;
+		}
+		if (camera.orthographicSize > 2.4 && value < 0)
+		{
+			camera.orthographicSize += value;
+		}
+	}
 
 	private void CameraFollowUnit()
 	{
-		newPosition = new Vector3 (focusedUnit.transform.position.x - 2.0f, focusedUnit.transform.position.y + 2.0f, -10.0f);
+		newPosition = new Vector3 (focusedUnit.transform.position.x + 2.0f, focusedUnit.transform.position.y + 2.0f, -10.0f);
 		newPosition.x = Mathf.Clamp (newPosition.x, leftBound, rightBound);
 		newPosition.y = Mathf.Clamp (newPosition.y, bottomBound, rightBound);
 		Camera.main.transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * camSpeed);
@@ -100,7 +118,7 @@ public class CameraManager : MonoBehaviour
 	public void UnitFocus(Unit unitObj)
 	{
 		//Assigns the transform the unitObj to the camera
-		newPosition = new Vector3 (unitObj.transform.position.x - 2.0f, unitObj.transform.position.y + 2.0f, -10.0f);
+		newPosition = new Vector3 (unitObj.transform.position.x - 2.5f, unitObj.transform.position.y + 2.0f, -10.0f);
 		newPosition.x = Mathf.Clamp (newPosition.x, leftBound, rightBound);
 		newPosition.y = Mathf.Clamp (newPosition.y, bottomBound, rightBound);
 		Camera.main.transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * camSpeed);

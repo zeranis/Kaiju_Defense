@@ -20,17 +20,17 @@ public class GameManager : MonoBehaviour
 		//listOfUnits = GetUnitList();
 		unitFocused = 0;
 	}
-
+	// add new unit to the list
 	public void AppendUnitToList(GameObject newUnit)
 	{
 		listOfUnits.Add(newUnit);
 	}
-
+	// return array have list of unit
 	private GameObject[] GetUnitList()
 	{
 		return listOfUnits.ToArray();
 	}
-
+	// cycle throught list to select which unit to troncol
 	public void CycleUnits()
 	{
 		if(unitFocused >= GetUnitList().Length - 1)
@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
 			unitFocused++;
 		}
 	}
+
+	// add all unit to the list.
 	public void getAllUnit()
 	{
 		foreach (Unit unit in GameObject.FindObjectsOfType(typeof(Unit))) 
@@ -49,11 +51,12 @@ public class GameManager : MonoBehaviour
 			listOfUnits.Add(unit.gameObject);
 		}
 	}
+	//return unit to control
 	public GameObject GetFocusedUnit()
 	{
 		return focusedUnit;
 	}
-
+	// change unit being focus
 	public void SetFocusedUnit()
 	{
 		focusedUnit = listOfUnits[unitFocused];

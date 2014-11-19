@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class InputManager : MonoBehaviour 
@@ -7,6 +7,7 @@ public class InputManager : MonoBehaviour
 
 	//--Private Members
 	public delegate void HandleAllInputs();
+
 	private CameraManager cameraManager;
 	private GameManager gameManager;
 	private HandleAllInputs handleAllInputs;
@@ -33,6 +34,7 @@ public class InputManager : MonoBehaviour
 		handleAllInputs += HandleAddUnit;
 		handleAllInputs += HandleUnitShoot;
 		handleAllInputs += HandleCannonAngle;
+		handleAllInputs += HandleCameraZooming;
 	}
 
 	// Update is called once per frame
@@ -136,6 +138,14 @@ public class InputManager : MonoBehaviour
 		}
 	}
 
+	// zoom in and out with mouse wheel
+	void HandleCameraZooming()
+	{
+		float newValue = Input.GetAxis("Mouse ScrollWheel");
+		cameraManager.CameraZooming(newValue);
+
+	}
+
 	// Adding new unit
 	void HandleAddUnit()
 	{
@@ -145,11 +155,12 @@ public class InputManager : MonoBehaviour
 		}
 
 	}
+
 	void HandleUnitShoot()
 	{
 		if (Input.GetButtonDown ("Shoot")) {
 			GameObject newUnit = Instantiate(Resources.Load("Bullet"),unit.transform.GetChild(0).transform.position,unit.transform.GetChild(0).transform.rotation) as GameObject;
-			newUnit.rigidbody2D.AddForce(500.0f * unit.transform.GetChild(0).transform.right);
+			newUnit.rigidbody2D.AddForce(900.0f * unit.transform.GetChild(0).transform.right);
 
 		}
 		
