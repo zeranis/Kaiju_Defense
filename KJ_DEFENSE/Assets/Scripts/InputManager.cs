@@ -153,7 +153,6 @@ public class InputManager : MonoBehaviour
 			GameObject newUnit = Instantiate(Resources.Load("TankObj-A"),gameManager.SpawnLocation.position,gameManager.SpawnLocation.rotation) as GameObject;
 			gameManager.AppendUnitToList (newUnit);
 		}
-
 	}
 
 	void HandleUnitShoot()

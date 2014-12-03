@@ -17,7 +17,9 @@ public class BulletLifetime : MonoBehaviour
 	}
 	public void destroy()
 	{
+
 		Destroy (this.gameObject, 0.0f);
+
 	}
 	void OnTriggerEnter2D(Collider2D col)
 	{

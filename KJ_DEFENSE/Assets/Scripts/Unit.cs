@@ -25,7 +25,8 @@ public class Unit : MonoBehaviour
 	public float objSpeed;
 	private Vector3 position;
 	private Quaternion rotation;
-	
+	public float timeBetweenAttack = 0.5f;
+	public float timer;
 	void Start()
 	{
 		//isFocused = true;
@@ -33,26 +34,32 @@ public class Unit : MonoBehaviour
 		position = this.transform.position;
 //		rotation = this.transform.GetChild (0).transform.rotation;
 	}
+
+	// Update every frame, make sure destroy tank if health below 0
 	void Update()
 	{
-		if (tankHealth <= 0) {
+		timer += Time.deltaTime; // record time since the last trigger
+
+		if (tankHealth <= 0) 
+		{
 			Destroy(this,0.75f);
-				}
 		}
+	}
+	//change the x cordinate of the unit with float value
+	//parameter moveDirection<float>
 	public void MoveFocusedUnit(float moveDirection)
 	{
 		position.x += moveDirection * objSpeed * Time.deltaTime;
 		this.transform.position = position;
 	}
-
+	// change the angle of cannon with parameter
+	//parameter angel<float>
 	public void ChangeCannonAngle(float angle)
 	{
-		//Vector3 world_pos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-		//this.transform.GetChild (0).LookAt (world_pos);
-		//rotation.z +=  1.0f * Time.deltaTime;
 		this.transform.GetChild(0).transform.Rotate(Vector3.forward * angle);
-		//Debug.Log (this.transform.GetChild (0).transform.rotation);
 	}
+	// set the animation to moving mode or idle mode
+	//parameter move<bool>
 	public void setAnimation(bool move)
 	{
 		if(move == true)
@@ -63,5 +70,23 @@ public class Unit : MonoBehaviour
 		{
 			anim.SetFloat("Speed", Mathf.Abs(0.0f));
 		}
+	}
+	// collider, check if it hit the damage 
+	void OnTriggerStay2D(Collider2D danger) 
+	{
+
+			
+			if(danger != null)
+			{
+
+				if (danger.CompareTag("Danger2"))
+				{
+					Debug.Log("Hit");
+					tankHealth--;
+				}
+				timer = 0f;
+			}
+
+
 	}
 }
