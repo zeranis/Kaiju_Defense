@@ -42,6 +42,7 @@ public class InputManager : MonoBehaviour
 	{
 		handleAllInputs();
 	}
+
 	//press tab to switch between unit.
 	void HandleUnitCameraFocus()
 	{

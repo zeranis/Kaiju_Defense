@@ -53,7 +53,7 @@
      <Compile Include="Assets\Scripts\Kaiju_Health.cs" />
      <Compile Include="Assets\Scripts\PinchZoom.cs" />
      <Compile Include="Assets\Scripts\Unit.cs" />
-     <Compile Include="Assets\explosion.cs" />
+     <Compile Include="Assets\Scripts\explosion.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.0/UnityEngine.UI.dll</HintPath>
  </Reference>
