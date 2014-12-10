@@ -15,10 +15,10 @@ public class Kaiju_Health : MonoBehaviour
 		set{currentHealth =value;
 			HandleHealth();}
 	}
-	
 	public int maxHealth;
 	public Text healthText;
 	public Image visualHealth;
+	// this group of value use for cool down
 	public float coolDown;
 	private bool onCD;
 	IEnumerator coolDownDmg(){
@@ -26,6 +26,7 @@ public class Kaiju_Health : MonoBehaviour
 		yield return new WaitForSeconds(coolDown);
 		onCD = false;
 	}
+	//=====================================================================
 	void Start () 
 	{
 		cachedY = healthTransform.position.y;
@@ -33,16 +34,16 @@ public class Kaiju_Health : MonoBehaviour
 		minXValue = healthTransform.position.x - healthTransform.rect.width;
 		onCD  = false;
 		currentHealth = maxHealth;
-
+HandleHealth();
 	}
 	//=====================================================================
 	// Calculate healthbar position
-
 	private float MapValues(float x, float inMin, float inMax, float outMin, float outMax)
 	{
 		return (x-inMin)*(outMax-outMin)/ (inMax -inMin) + outMin;
 		
 	}
+
 	//=====================================================================
 	// Handle Health bar color and text
 	private void HandleHealth()
@@ -58,6 +59,7 @@ public class Kaiju_Health : MonoBehaviour
 			visualHealth.color = new Color32(255,(byte)MapValues(currentHealth,0,maxHealth/2,255,0),0,255);
 		}
 	}
+	//=====================================================================
 	public void KaijuGetDmg(){
 	
 		if (!onCD && currentHealth>0) {

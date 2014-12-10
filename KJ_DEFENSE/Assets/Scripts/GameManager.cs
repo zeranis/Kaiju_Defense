@@ -9,27 +9,38 @@ public class GameManager : MonoBehaviour
 	public GameObject focusedUnit;
 	public Transform SpawnLocation;
 	public List<GameObject> listOfUnits = new List<GameObject>();
-	private int unitFocused;
+	private int unitFocused = 0;
 
 	void Awake()
 	{
 		listOfUnits.Add(focusedUnit);
 	}
-	void Start()
-	{
-		//listOfUnits = GetUnitList();
-		unitFocused = 0;
-	}
+	//=========================================================================
+//	void Start()
+//	{
+//		//listOfUnits = GetUnitList();
+//		unitFocused = 0;
+//	}
+	//=========================================================================
 	// add new unit to the list
 	public void AppendUnitToList(GameObject newUnit)
 	{
 		listOfUnits.Add(newUnit);
 	}
+	//=========================================================================
+	// search and remove unit which was destroyed list
+	public void RemoveUnitFromList(GameObject newUnit)
+	{
+		listOfUnits.Remove(newUnit);		
+	}
+
+	//=========================================================================
 	// return array have list of unit
 	private GameObject[] GetUnitList()
 	{
 		return listOfUnits.ToArray();
 	}
+	//=========================================================================
 	// cycle throught list to select which unit to troncol
 	public void CycleUnits()
 	{
@@ -42,7 +53,7 @@ public class GameManager : MonoBehaviour
 			unitFocused++;
 		}
 	}
-
+	//=========================================================================
 	// add all unit to the list.
 	public void getAllUnit()
 	{

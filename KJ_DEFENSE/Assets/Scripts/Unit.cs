@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -13,14 +13,23 @@ public class Unit : MonoBehaviour
 {
 	//Declaring local variables:
 	public Unit_Type type;
+
 	Animator anim;
-	public  int currentHealth;
-	private int CurrentHealth 
-	{
-		get{return currentHealth;}
-		set{currentHealth = value;
-			}
-		}
+
+	//Public members:
+	//public Texture playerHealthTexture; //Player Life
+	//public float screenPosX; //Controls screen position of texture
+	//public float screenPosY; //...
+	//public int iconSizeX = 10; //Controls icon size on screen
+	//public int iconSizeY = 10; //...
+	public int tankHealth = 10; //Starting armor
+	private GameManager gameManager;
+	public float objSpeed;
+	private Vector3 position;
+	private Quaternion rotation;
+	public float timeBetweenAttack = 0.5f;
+	public float timer;
+	//this group of value use for cool down
 	public float coolDown;
 	private bool onCD;
 	IEnumerator coolDownDmg(){
@@ -28,27 +37,13 @@ public class Unit : MonoBehaviour
 		yield return new WaitForSeconds(coolDown);
 		onCD = false;
 	}
-	//Public members:
-	//public Texture playerHealthTexture; //Player Life
-	//public float screenPosX; //Controls screen position of texture
-	//public float screenPosY; //...
-	//public int iconSizeX = 10; //Controls icon size on screen
-	//public int iconSizeY = 10; //...
-	
-	public float objSpeed;
-	private Vector3 position;
-	private Quaternion rotation;
-	public float timeBetweenAttack = 0.5f;
-	public float timer;
 	//=====================================================================
 	void Start()
 	{
 		//isFocused = true;
 		anim = GetComponent<Animator>();
 		position = this.transform.position;
-		
-		onCD  = false;
-		
+
 
 //		rotation = this.transform.GetChild (0).transform.rotation;
 	}
@@ -59,9 +54,12 @@ public class Unit : MonoBehaviour
 	{
 		timer += Time.deltaTime; // record time since the last trigger
 
-		if (currentHealth <= 0) 
+		if (tankHealth <= 0) 
 		{
-			Destroy (this.gameObject, 0.05f);
+			gameManager.RemoveUnitFromList(this.gameObject);
+			Debug.Log("removed");
+			Destroy(this.gameObject,0.0f);
+
 		}
 
 	}
@@ -104,11 +102,19 @@ public class Unit : MonoBehaviour
 	{
 		if(other.CompareTag("Danger")  )
 		{
-			if (!onCD && currentHealth>0) {
-				StartCoroutine(coolDownDmg());
-				CurrentHealth--;
-			}
+
+			takeDamage();
 		}
 	}
 
+	//=====================================================================
+	// call this function to reduce tank health.
+	public void takeDamage()
+	{
+		if (!onCD && this.tankHealth>0) {
+			StartCoroutine(coolDownDmg());
+
+		this.tankHealth--;
+		}
+	}
 }
