@@ -23,7 +23,9 @@ public class Unit : MonoBehaviour
 	//public int iconSizeX = 10; //Controls icon size on screen
 	//public int iconSizeY = 10; //...
 	public int tankHealth = 10; //Starting armor
+	public int tankMaxHealth = 10;
 	private GameManager gameManager;
+	private CameraManager cameraManager;
 	public float objSpeed;
 	private Vector3 position;
 	private Quaternion rotation;
@@ -43,6 +45,8 @@ public class Unit : MonoBehaviour
 		//isFocused = true;
 		anim = GetComponent<Animator>();
 		position = this.transform.position;
+		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+		cameraManager = Camera.main.GetComponent<CameraManager>();
 
 
 //		rotation = this.transform.GetChild (0).transform.rotation;
@@ -54,17 +58,26 @@ public class Unit : MonoBehaviour
 	{
 		timer += Time.deltaTime; // record time since the last trigger
 
-		if (tankHealth <= 0) 
+		if (this.tankHealth <= 0) 
 		{
+			Debug.Log ("Dead");
 			gameManager.RemoveUnitFromList(this.gameObject);
-			Debug.Log("removed");
+			gameManager.CycleUnits();
+			if (gameManager.listOfUnits.Count != 0){
+				gameManager.SetFocusedUnit();
+				cameraManager.UnitFocus(gameManager.GetFocusedUnit().GetComponent<Unit>());
+			}
 			Destroy(this.gameObject,0.0f);
+			//.getAllUnit();
 
 		}
+		if (this.tankHealth <= tankMaxHealth/3) {
+			//this.gameObject.GetComponent<particleSystem>.enabled = true;
+				}
 
 	}
 
-	//=====================================================================
+	//=====================================================================;
 	//change the x cordinate of the unit with float value
 	//parameter moveDirection<float>
 	public void MoveFocusedUnit(float moveDirection)
@@ -102,7 +115,6 @@ public class Unit : MonoBehaviour
 	{
 		if(other.CompareTag("Danger")  )
 		{
-
 			takeDamage();
 		}
 	}

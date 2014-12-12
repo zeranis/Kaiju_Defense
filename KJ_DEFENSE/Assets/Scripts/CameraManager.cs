@@ -8,13 +8,14 @@ public class CameraManager : MonoBehaviour
 	//--Public members
 	public float camSpeed;
 	public GameObject centerBg;
+	public GameManager gameManager;
+	//private GameManager gameManager;
 	//--Private members
 	private Vector3 newPosition;
-	private bool isUnitFocused;
 	private float panningSpeed = 2.0f;
 //	private float zoomingSpeed = 2.0f;
 	private Vector3 temp;
-	private Unit focusedUnit;
+	public Unit focusedUnit;
 
 
 	//Temporary variables -- some of these might stay
@@ -39,7 +40,6 @@ public class CameraManager : MonoBehaviour
 		Camera.main.orthographic = true;
 
 		//Initializing isUnitFocused to false
-		isUnitFocused = false;
 		float widthBG = 38.4f;
 		float heightBG = 10.24f;
 		float vertExtent = camera.orthographicSize; 
@@ -48,13 +48,15 @@ public class CameraManager : MonoBehaviour
 		rightBound = (widthBG / 2.0f) - horzExtent;
 		bottomBound = vertExtent - (heightBG / 2.0f);
 		topBound = (heightBG / 2.0f) - vertExtent;
+		//gameManager = gameObject.GetComponent<GameManager>();
+		//focusedUnit = gameManager.GetFocusedUnit().GetComponent<Unit>();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
 		//Making the camera move to the focused GameObject
-		if(isUnitFocused == true)
+		if(gameManager.listOfUnits.Count != 0)
 		{
 			//Lerp the camera to new position. 
 			CameraFollowUnit();
@@ -72,8 +74,6 @@ public class CameraManager : MonoBehaviour
 		
 		//This will be the new position of the mouse, thus will also be the camera's new position
 		Vector3 mouseDestination = new Vector3(mousePosNormalized.x * panningSpeed, mousePosNormalized.y * panningSpeed, 0);
-
-		isUnitFocused = false;
 
 		temp = gameObject.transform.position + mouseDestination;
 		temp.x = Mathf.Clamp(temp.x, leftBound, rightBound);
@@ -122,7 +122,6 @@ public class CameraManager : MonoBehaviour
 		newPosition.x = Mathf.Clamp (newPosition.x, leftBound, rightBound);
 		newPosition.y = Mathf.Clamp (newPosition.y, bottomBound, rightBound);
 		Camera.main.transform.position = Vector3.Lerp(transform.position, newPosition, Time.deltaTime * camSpeed);
-		isUnitFocused = true;
 		focusedUnit = unitObj;
 	}
 }

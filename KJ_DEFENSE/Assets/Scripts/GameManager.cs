@@ -31,12 +31,12 @@ public class GameManager : MonoBehaviour
 	// search and remove unit which was destroyed list
 	public void RemoveUnitFromList(GameObject newUnit)
 	{
-		listOfUnits.Remove(newUnit);		
+		listOfUnits.Remove(newUnit);
 	}
 
 	//=========================================================================
 	// return array have list of unit
-	private GameObject[] GetUnitList()
+	public GameObject[] GetUnitList()
 	{
 		return listOfUnits.ToArray();
 	}
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
 	// cycle throught list to select which unit to troncol
 	public void CycleUnits()
 	{
-		if(unitFocused >= GetUnitList().Length - 1)
+		if(unitFocused >= listOfUnits.Count - 1)
 		{
 			unitFocused = 0;
 		}
@@ -62,6 +62,18 @@ public class GameManager : MonoBehaviour
 			listOfUnits.Add(unit.gameObject);
 		}
 	}
+
+	public void UpdateList()
+	{
+		List<GameObject> temp = new List<GameObject>();
+
+		foreach (Unit unit in GameObject.FindObjectsOfType(typeof(Unit))) 
+		{
+			temp.Add(unit.gameObject);
+		}
+
+	}
+
 	//return unit to control
 	public GameObject GetFocusedUnit()
 	{
@@ -71,7 +83,6 @@ public class GameManager : MonoBehaviour
 	public void SetFocusedUnit()
 	{
 		focusedUnit = listOfUnits[unitFocused];
-	
 	}
 	//Reference
 	//Declaring local variables

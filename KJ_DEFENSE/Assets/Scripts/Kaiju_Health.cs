@@ -56,7 +56,7 @@ HandleHealth();
 			visualHealth.color = new Color32((byte)MapValues(currentHealth,maxHealth/2,maxHealth,255,0),255,0,255);
 		}
 		else {
-			visualHealth.color = new Color32(255,(byte)MapValues(currentHealth,0,maxHealth/2,255,0),0,255);
+			visualHealth.color = new Color32(255,(byte)MapValues(currentHealth,0,maxHealth/2,0,255),0,255);
 		}
 	}
 	//=====================================================================

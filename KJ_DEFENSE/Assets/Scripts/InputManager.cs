@@ -7,11 +7,13 @@ public class InputManager : MonoBehaviour
 
 	//--Private Members
 	public delegate void HandleAllInputs();
+	public delegate void HandleUnitInputs();
 
 	private CameraManager cameraManager;
 	private GameManager gameManager;
 	private HandleAllInputs handleAllInputs;
-	private Unit unit;
+	private HandleUnitInputs handleUnitInputs;
+	public Unit unit;
 	private float back = -1.0f;
 	private float forward = 1.0f;
 	private int unitFocused;
@@ -27,20 +29,32 @@ public class InputManager : MonoBehaviour
 		cameraManager = Camera.main.GetComponent<CameraManager>();
 		gameManager = gameObject.GetComponent<GameManager>();
 		unit = gameManager.GetFocusedUnit().GetComponent<Unit>();
-			
-		handleAllInputs += HandleUnitCameraFocus;
-		handleAllInputs += HandleCameraPanning;
-		handleAllInputs += HandleUnitMovement;
+
 		handleAllInputs += HandleAddUnit;
-		handleAllInputs += HandleUnitShoot;
-		handleAllInputs += HandleCannonAngle;
+		handleAllInputs += HandleCameraPanning;
 		handleAllInputs += HandleCameraZooming;
+
+		handleUnitInputs += HandleUnitCameraFocus;
+		handleUnitInputs += HandleUnitMovement;
+		handleUnitInputs += HandleUnitShoot;
+		handleUnitInputs += HandleCannonAngle;
+		cameraManager.UnitFocus(unit);
 	}
 
 	// Update is called once per frame
 	void Update () 
 	{
 		handleAllInputs();
+		if (gameManager.focusedUnit != null && unit != null && unit == gameManager.focusedUnit.GetComponent<Unit>())
+		{
+			handleUnitInputs();
+		}
+		else if (gameManager.focusedUnit != null)
+		{
+			unit = gameManager.focusedUnit.GetComponent<Unit>();
+		}
+		//else
+			//HandleUnitCameraFocus();
 	}
 
 	//press tab to switch between unit.
@@ -48,6 +62,7 @@ public class InputManager : MonoBehaviour
 	{
 		if(Input.GetKeyDown(KeyCode.Tab))
 		{
+
 			isNotHit = true;
 			unit.setAnimation(false);
 			gameManager.CycleUnits();
@@ -58,19 +73,19 @@ public class InputManager : MonoBehaviour
 
 		if(isNotHit == false)
 		{
+
 			if (cameraRay.collider.gameObject.CompareTag("Tank"))
 			{
 				unit.setAnimation(false);
 				unit = cameraRay.collider.gameObject.GetComponent<Unit>();
 			}
-				cameraManager.UnitFocus(unit);
+			cameraManager.UnitFocus(unit);
 		}
 	}
 
 	 //press a or d to move unit being controled
 	void HandleUnitMovement()
 	{
-
 		if(Input.GetKey(KeyCode.A))
 		{	
 			unit.setAnimation(true);
@@ -153,6 +168,9 @@ public class InputManager : MonoBehaviour
 		if (Input.GetButtonDown ("SpawnTank")) {
 			GameObject newUnit = Instantiate(Resources.Load("TankObj-A"),gameManager.SpawnLocation.position,gameManager.SpawnLocation.rotation) as GameObject;
 			gameManager.AppendUnitToList (newUnit);
+			gameManager.CycleUnits();
+			gameManager.SetFocusedUnit();
+			cameraManager.UnitFocus(newUnit.GetComponent<Unit>());
 		}
 	}
 
