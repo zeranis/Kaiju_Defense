@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Kaiju_Health : MonoBehaviour 
 {
@@ -8,6 +9,7 @@ public class Kaiju_Health : MonoBehaviour
 	private float cachedY;
 	private float minXValue;
 	private float maxXValue;
+	public int maxHealth;
 	public  int currentHealth;
 	private int CurrentHealth 
 	{
@@ -15,10 +17,13 @@ public class Kaiju_Health : MonoBehaviour
 		set{currentHealth =value;
 			HandleHealth();}
 	}
-	public int maxHealth;
+	public List<AudioClip> listAudioClip ;
+
+
 	public Text healthText;
 	public Image visualHealth;
 	// this group of value use for cool down
+	public float timerBetweenMove;
 	public float coolDown;
 	private bool onCD;
 	IEnumerator coolDownDmg(){
@@ -29,13 +34,23 @@ public class Kaiju_Health : MonoBehaviour
 	//=====================================================================
 	void Start () 
 	{
+
 		cachedY = healthTransform.position.y;
 		maxXValue = healthTransform.position.x;
 		minXValue = healthTransform.position.x - healthTransform.rect.width;
 		onCD  = false;
 		currentHealth = maxHealth;
-HandleHealth();
+		HandleHealth();
 	}
+	void Update(){
+		if (currentHealth == (maxHealth/2)+1)
+			playSound(0);
+		else if (currentHealth == 1){
+
+			playSound(1);
+		}
+	}
+
 	//=====================================================================
 	// Calculate healthbar position
 	private float MapValues(float x, float inMin, float inMax, float outMin, float outMax)
@@ -63,9 +78,19 @@ HandleHealth();
 	public void KaijuGetDmg(){
 	
 		if (!onCD && currentHealth>0) {
-		StartCoroutine(coolDownDmg());
-		CurrentHealth--;
+			StartCoroutine(coolDownDmg());
+			CurrentHealth--;
+
+	
+		}
 	}
+	//=====================================================================
+	// Play sound
+	private void playSound(int clip)
+	{
+		audio.clip = listAudioClip[clip];
+		audio.Play();
+
 	}
 
 }

@@ -129,4 +129,10 @@ public class Unit : MonoBehaviour
 		this.tankHealth--;
 		}
 	}
+	//=====================================================================
+	// Playsound
+	public void ShootSound()
+	{
+		audio.Play();
+	}
 }

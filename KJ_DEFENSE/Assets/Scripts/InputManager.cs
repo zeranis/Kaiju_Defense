@@ -19,6 +19,8 @@ public class InputManager : MonoBehaviour
 	private int unitFocused;
 	private Vector3 lastMousePosition;
 	private RaycastHit2D cameraRay;
+	public float timeBetweenShot = 1.5f;
+	float timerShot;
 
 	private bool isNotHit;
 
@@ -53,6 +55,7 @@ public class InputManager : MonoBehaviour
 		{
 			unit = gameManager.focusedUnit.GetComponent<Unit>();
 		}
+		timerShot += Time.deltaTime;
 		//else
 			//HandleUnitCameraFocus();
 	}
@@ -176,10 +179,11 @@ public class InputManager : MonoBehaviour
 
 	void HandleUnitShoot()
 	{
-		if (Input.GetButtonDown ("Shoot")) {
+		if (Input.GetButtonDown ("Shoot") && timerShot >= timeBetweenShot) {
 			GameObject newUnit = Instantiate(Resources.Load("Bullet"),unit.transform.GetChild(0).transform.position,unit.transform.GetChild(0).transform.rotation) as GameObject;
 			newUnit.rigidbody2D.AddForce(900.0f * unit.transform.GetChild(0).transform.right);
-
+			unit.GetComponent<Unit>().ShootSound();
+			timerShot = 0;
 		}
 		
 	}
