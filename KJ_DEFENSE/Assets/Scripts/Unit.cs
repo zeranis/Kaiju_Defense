@@ -84,6 +84,7 @@ public class Unit : MonoBehaviour
 	{
 		position.x += moveDirection * objSpeed * Time.deltaTime;
 		this.transform.position = position;
+
 	}
 
 	//=====================================================================
