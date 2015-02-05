@@ -26,12 +26,12 @@ public class Kaiju_Health : MonoBehaviour
 		yield return new WaitForSeconds(coolDownBetweenHit);
 		onCD = false;
 	}
-
+	//public bool started=false;
+	public bool started =true;//it needs to be changed to false later when I(Hong) fix the issue.
 	//=====================================================================
 	void Start () 
 	{
-
-
+		
 		onCD  = false;
 		anim = GetComponent <Animator> ();
 		currentHealth = maxHealth;
@@ -41,28 +41,31 @@ public class Kaiju_Health : MonoBehaviour
 	//=================Update every frame===========
 	// Check if kaiju is half health or 0 health to play sound. and play animation.
 	void Update(){
-
-
-		KaijuPosition.x += -1.0f * kaijuSpeed * Time.deltaTime;;
-		this.transform.position = KaijuPosition;
-		//KaijuPosition = new Vector3 (speed.x * direction.x, speed.y * direction.y);
+		//Kaiju only moves when the camera has been moved from title screen to the platfrom already.
+		//if (started == true) 
+		//{
+						KaijuPosition.x += -1.0f * kaijuSpeed * Time.deltaTime;
+						;
+						this.transform.position = KaijuPosition;
+						//KaijuPosition = new Vector3 (speed.x * direction.x, speed.y * direction.y);
 		
-		if (currentHealth == (maxHealth/2)+1)//i dont know why i must be +1 to give the right value.
-			playSound(0);
-		else if (currentHealth == 0){
-			anim.SetTrigger ("Die");
-			playSound(1);
-		}
-		if (currentHealth == 0) {
-			dieCD+= Time.deltaTime;
-		//	Destroy (this.gameObject, 2.0f);
-		//	Debug.Log("destroy");
-				}
-		if (currentHealth == 0 && dieCD >= 1f) {
-			anim.SetTrigger ("New Bool");
-			Destroy (this.gameObject, 4.0f);
+						if (currentHealth == (maxHealth / 2) + 1)//i dont know why i must be +1 to give the right value.
+								playSound (0);
+						else if (currentHealth == 0) {
+								anim.SetTrigger ("Die");
+								playSound (1);
+						}
+						if (currentHealth == 0) {
+								dieCD += Time.deltaTime;
+								//	Destroy (this.gameObject, 2.0f);
+								//	Debug.Log("destroy");
+						}
+						if (currentHealth == 0 && dieCD >= 1f) {
+								anim.SetTrigger ("New Bool");
+								Destroy (this.gameObject, 4.0f);
 
-				}
+						}
+		//}
 
 	}
 

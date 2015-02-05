@@ -17,12 +17,15 @@ public class CameraManager : MonoBehaviour
 	private Vector3 temp;
 	public Unit focusedUnit;
 
+	public bool camMoved=false;// checking camera movement.
+
 
 	//Temporary variables -- some of these might stay
 	private float rightBound, leftBound, topBound, bottomBound;
 	private Vector3 pos;
-
-
+	//location of game platform
+	private Vector3 gameloc= new Vector3(5.7211f, 0f, -5f);
+	//public Kaiju_Health Kh;
 	// Use this for super initialization
 	void Awake()
 	{
@@ -50,17 +53,29 @@ public class CameraManager : MonoBehaviour
 		topBound = (heightBG / 2.0f) - vertExtent;
 		//gameManager = gameObject.GetComponent<GameManager>();
 		//focusedUnit = gameManager.GetFocusedUnit().GetComponent<Unit>();
+
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		//Making the camera move to the focused GameObject
-		if(gameManager.listOfUnits.Count != 0)
+		if (Input.GetKeyDown("z") && camMoved == false) //if start is clicked. For now, just press z button.
 		{
-			//Lerp the camera to new position. 
-			CameraFollowUnit();
+			camera.transform.position=gameloc;//move camera to (5.7211 0 -5)
+			camMoved = true;
+
 		}
+		if (camMoved == true)
+		{
+			//Kh.started = true;//changed started in the Kaiju_Health = true
+			//Making the camera move to the focused GameObject
+			if (gameManager.listOfUnits.Count != 0) 
+			{
+			//Lerp the camera to new position. 
+			CameraFollowUnit ();
+			}
+		}
+
 	}
 
 	//Method -- CameraPanning
