@@ -24,8 +24,10 @@ public class CameraManager : MonoBehaviour
 	private float rightBound, leftBound, topBound, bottomBound;
 	private Vector3 pos;
 	//location of game platform
-	private Vector3 gameloc= new Vector3(5.7211f, 0f, -5f);
-	//public Kaiju_Health Kh;
+	//private Vector3 gameloc= new Vector3(5.7211f, 0f, -5f);//added to switch cam.
+	//private Vector3 mapLoc= new Vector3(0.4f,-17.5f, -5f);//added to switch cam
+	//8public Kaiju_Health Kh;//useless 
+	//public bool MovetoMap=false; // move cam to world map?
 	// Use this for super initialization
 	void Awake()
 	{
@@ -59,23 +61,11 @@ public class CameraManager : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if (Input.GetKeyDown("z") && camMoved == false) //if start is clicked. For now, just press z button.
-		{
-			camera.transform.position=gameloc;//move camera to (5.7211 0 -5)
-			camMoved = true;
-
-		}
-		if (camMoved == true)
-		{
-			//Kh.started = true;//changed started in the Kaiju_Health = true
-			//Making the camera move to the focused GameObject
 			if (gameManager.listOfUnits.Count != 0) 
 			{
 			//Lerp the camera to new position. 
 			CameraFollowUnit ();
 			}
-		}
-
 	}
 
 	//Method -- CameraPanning
