@@ -23,4 +23,8 @@ public class ScencChangetest : MonoBehaviour {
 	{
 		Application.LoadLevel ("Menu-Scene");
 	}
+	public void toUpgrade()
+	{
+		Application.LoadLevel ("Upgrade");
+	}
 }
